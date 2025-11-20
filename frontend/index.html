@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HuggingFace Image Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎨 HuggingFace Image Generator</h1>
+            <div class="header-controls">
+                <span id="status-indicator" class="status">Ready</span>
+                <button id="theme-toggle" class="icon-btn" title="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Left Panel: Controls -->
+            <div class="left-panel">
+                <div class="panel-content">
+                    <!-- Model Selection -->
+                    <div class="form-group">
+                        <label for="model-select">Model Selection</label>
+                        <select id="model-select" class="form-control">
+                            <option value="">Loading models...</option>
+                        </select>
+                        <small id="model-description" class="form-hint"></small>
+                    </div>
+
+                    <!-- Prompt Input -->
+                    <div class="form-group">
+                        <label for="prompt">Prompt</label>
+                        <textarea 
+                            id="prompt" 
+                            class="form-control" 
+                            rows="4" 
+                            placeholder="Describe the image you want to generate...&#10;&#10;Example: A serene lake surrounded by mountains at sunset, photorealistic style"
+                            maxlength="1000"
+                        ></textarea>
+                        <small class="form-hint">
+                            <span id="prompt-length">0</span>/1000 characters
+                        </small>
+                    </div>
+
+                    <!-- Negative Prompt -->
+                    <div class="form-group">
+                        <label for="negative-prompt">Negative Prompt (Optional)</label>
+                        <textarea 
+                            id="negative-prompt" 
+                            class="form-control" 
+                            rows="2" 
+                            placeholder="What to avoid (e.g., blurry, low quality, distorted)"
+                            maxlength="500"
+                        ></textarea>
+                        <small class="form-hint">
+                            <span id="negative-prompt-length">0</span>/500 characters
+                        </small>
+                    </div>
+
+                    <!-- Parameters Section -->
+                    <div class="parameters-section">
+                        <h3>⚙️ Parameters</h3>
+
+                        <!-- Image Size -->
+                        <div class="form-group">
+                            <label>Image Size</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="size" value="512" />
+                                    <span>512x512</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="size" value="768" checked />
+                                    <span>768x768</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="size" value="1024" />
+                                    <span>1024x1024</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Inference Steps Slider -->
+                        <div class="form-group">
+                            <label for="steps">
+                                Steps: <span id="steps-value">30</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="steps" 
+                                class="slider" 
+                                min="4" 
+                                max="50" 
+                                value="30" 
+                                step="1"
+                            />
+                            <div class="slider-labels">
+                                <span>4</span>
+                                <span>50</span>
+                            </div>
+                        </div>
+
+                        <!-- Guidance Scale Slider -->
+                        <div class="form-group">
+                            <label for="guidance">
+                                Guidance Scale: <span id="guidance-value">7.5</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="guidance" 
+                                class="slider" 
+                                min="1" 
+                                max="20" 
+                                value="7.5" 
+                                step="0.5"
+                            />
+                            <div class="slider-labels">
+                                <span>1.0</span>
+                                <span>20.0</span>
+                            </div>
+                        </div>
+
+                        <!-- Seed Input -->
+                        <div class="form-group">
+                            <label for="seed">Seed (Optional)</label>
+                            <div class="seed-input-group">
+                                <input 
+                                    type="number" 
+                                    id="seed" 
+                                    class="form-control" 
+                                    placeholder="Random" 
+                                    min="0"
+                                />
+                                <button id="random-seed" class="btn-secondary" title="Generate random seed">
+                                    🎲 Random
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button id="generate-btn" class="btn-primary">
+                        🎨 Generate Image
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Image Display -->
+            <div class="right-panel">
+                <div class="panel-content">
+                    <!-- Generated Image Display -->
+                    <div class="image-display-section">
+                        <h3>Generated Image</h3>
+                        <div id="image-container" class="image-container">
+                            <div class="placeholder">
+                                <div class="placeholder-icon">🖼️</div>
+                                <p>Your generated image will appear here</p>
+                                <p class="placeholder-hint">Fill in the prompt and click "Generate Image"</p>
+                            </div>
+                            <img id="generated-image" class="generated-image" style="display: none;" alt="Generated image" />
+                            <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                                <div class="spinner"></div>
+                                <p>Generating image...</p>
+                                <p class="loading-hint">This may take 15-30 seconds</p>
+                            </div>
+                        </div>
+
+                        <!-- Image Actions -->
+                        <div id="image-actions" class="image-actions" style="display: none;">
+                            <button id="download-btn" class="btn-action">
+                                💾 Download
+                            </button>
+                            <button id="copy-prompt-btn" class="btn-action">
+                                📋 Copy Prompt
+                            </button>
+                            <button id="regenerate-btn" class="btn-action">
+                                🔄 Regenerate
+                            </button>
+                        </div>
+
+                        <!-- Image Metadata -->
+                        <div id="image-metadata" class="image-metadata" style="display: none;">
+                            <p><strong>Model:</strong> <span id="meta-model"></span></p>
+                            <p><strong>Size:</strong> <span id="meta-size"></span></p>
+                            <p><strong>Steps:</strong> <span id="meta-steps"></span></p>
+                            <p><strong>Time:</strong> <span id="meta-time"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Generations Gallery -->
+                    <div class="gallery-section">
+                        <h3>📸 Recent Generations</h3>
+                        <div id="gallery" class="gallery">
+                            <p class="gallery-empty">No images generated yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                Powered by 
+                <a href="https://huggingface.co" target="_blank">HuggingFace</a>
+                | <span id="current-model">FLUX.1 Dev</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="error-toast" class="toast toast-error" style="display: none;">
+        <span id="error-message"></span>
+        <button class="toast-close" onclick="hideError()">×</button>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="success-toast" class="toast toast-success" style="display: none;">
+        <span id="success-message"></span>
+        <button class="toast-close" onclick="hideSuccess()">×</button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
