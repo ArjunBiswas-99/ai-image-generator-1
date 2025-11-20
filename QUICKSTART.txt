@@ -1,0 +1,66 @@
+# Basic AI Image Generator - Quick Start Guide
+
+## ✅ Installation Complete!
+
+Your application is now running successfully!
+
+## 🌐 Access the Application
+
+Open your browser and go to:
+http://localhost:5000
+
+## 🎨 How to Use
+
+1. Enter a prompt in the text box
+   Example: "A serene lake surrounded by mountains at sunset"
+
+2. Select a model from dropdown (default: FLUX.1 Dev)
+
+3. Adjust parameters:
+   - Image Size: 512x512, 768x768, or 1024x1024
+   - Steps: 4-50 (higher = better quality, slower)
+   - Guidance Scale: 1-20 (how closely it follows prompt)
+   - Seed: Optional (for reproducible results)
+   - Negative Prompt: What to avoid
+
+4. Click "Generate Image"
+
+5. Wait 15-30 seconds
+
+6. Your image appears!
+
+## 🎯 Features
+
+- Download images (💾 button)
+- Copy prompts (📋 button)
+- Regenerate with same settings (🔄 button)
+- Gallery saves recent images
+- Dark/Light theme toggle (🌙 button)
+- Random seed generator (🎲 button)
+
+## 🛠️ Available Models
+
+1. FLUX.1 Dev - High quality, versatile
+2. SDXL Lightning - Fast generation
+3. Stable Diffusion XL - Reliable, popular
+4. Hyper-SD - Balanced quality/speed
+5. Qwen Image - Artistic style
+
+## 💡 Tips for Best Results
+
+- Be specific and descriptive in prompts
+- Use negative prompts to avoid unwanted elements
+- Higher steps = better quality (but slower)
+- Guidance scale 7-8 usually works well
+- Try different models for different styles
+
+## 🔧 Stop the Server
+
+Press CTRL+C in the terminal
+
+## 🚀 Start Again
+
+cd ai-image-generator-1/backend
+python3 app.py
+
+Enjoy generating amazing images! 🎨

@@ -25,7 +25,7 @@ const App = {
      * Responsibility: ONLY coordinate initialization tasks
      */
     async init() {
-        console.log('Initializing HuggingFace Image Generator...');
+        console.log('Initializing Basic AI Image Generator...');
         
         try {
             // Load saved theme
