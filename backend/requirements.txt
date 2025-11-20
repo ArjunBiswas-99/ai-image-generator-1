@@ -1,0 +1,24 @@
+# HuggingFace Image Generator - Python Dependencies
+# 
+# Install with: pip install -r requirements.txt
+# 
+# It's recommended to use a virtual environment:
+#   python -m venv venv
+#   source venv/bin/activate  # On Windows: venv\Scripts\activate
+#   pip install -r requirements.txt
+
+# Web Framework
+Flask==3.0.0
+flask-cors==4.0.0
+
+# HuggingFace Integration
+huggingface-hub==0.20.0
+
+# Image Processing
+Pillow==10.1.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Optional but recommended for production
+# gunicorn==21.2.0  # WSGI server for production deployment
